@@ -1,0 +1,17 @@
+name: ghmods_donate
+version: '1.0.1'
+main: ghmodsgroup.ghmods_donate.Ghmods_donate
+api-version: '1.20'
+authors: [ red_torch ]
+libraries:
+  - com.zaxxer:HikariCP:4.0.3
+  - mysql:mysql-connector-java:8.0.28
+
+commands:
+  время:
+    description: Донатное время йоу
+    usage: /время [добавить/убавить/установить/проверить] [player] [amount]
+permissions:
+  donation.admin:
+    description: Access to managing donated time
+    default: op
