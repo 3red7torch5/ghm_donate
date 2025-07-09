@@ -211,6 +211,16 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                     String targetName = target.getName();
 
                     try {
+                        if (action.equals("компенсация") && args.length == 2) {
+                            int amount = Integer.valueOf(args[1]);
+                            for (Player p : getServer().getOnlinePlayers()) {
+                                addTime(p.getName(),amount);
+                                target.sendMessage(notificationPrefix + "§9Вам зачислено §6" + amount + " §aсекунд");
+                                getServer().dispatchCommand(getServer().getConsoleSender(),
+                                        "execute as "+targetName+" at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
+                            }
+                            updateScores();
+                        }
                         int amount = Integer.valueOf(args[2]);
                         if (action.equals("добавить") && args.length == 3) {
                             addTime(targetName, amount);
@@ -260,7 +270,9 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
             sender.sendMessage("§6/время §f- Проверить баланс");
             sender.sendMessage("§6/время добавить <ник> <количество> §f- Добавить время по нику");
             sender.sendMessage("§6/время убавить <ник> <количество> §f- Убавить время по нику");
+            sender.sendMessage("§6/время компенсация <количество> §f- Добавить время всем на сервере");
             sender.sendMessage("§6/время залить §f- Залить всё время с баланса в бутылку в инвентаре");
+
         } else {
             sender.sendMessage("§cИспользование:");
             sender.sendMessage("§6/время §f- Проверить баланс");
@@ -277,6 +289,7 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                 if (sender.hasPermission("donation.admin")) {
                     completions.add("добавить");
                     completions.add("убавить");
+                    completions.add("компенсация");
                     completions.add("установить");
                 }
                 completions.add("залить");
