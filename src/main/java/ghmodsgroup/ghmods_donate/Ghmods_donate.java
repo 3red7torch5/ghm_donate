@@ -201,6 +201,16 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
             }
             
             if (sender.hasPermission("donation.admin")) {
+                if (action.equals("компенсация") && args.length == 2) {
+                    int amount = Integer.valueOf(args[1]);
+                    for (Player p : getServer().getOnlinePlayers()) {
+                        addTime(p.getName(),amount);
+                        p.sendMessage(notificationPrefix + "§9Вам зачислено §6" + amount + " §aсекунд");
+                        getServer().dispatchCommand(getServer().getConsoleSender(),
+                                "execute as "+p.getName()+" at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
+                    }
+                    updateScores();
+                }
                 if (args.length >= 2) {
                     Player target = Bukkit.getPlayer(args[1]);
                     if (target == null) {
@@ -211,16 +221,6 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                     String targetName = target.getName();
 
                     try {
-                        if (action.equals("компенсация") && args.length == 2) {
-                            int amount = Integer.valueOf(args[1]);
-                            for (Player p : getServer().getOnlinePlayers()) {
-                                addTime(p.getName(),amount);
-                                target.sendMessage(notificationPrefix + "§9Вам зачислено §6" + amount + " §aсекунд");
-                                getServer().dispatchCommand(getServer().getConsoleSender(),
-                                        "execute as "+targetName+" at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
-                            }
-                            updateScores();
-                        }
                         int amount = Integer.valueOf(args[2]);
                         if (action.equals("добавить") && args.length == 3) {
                             addTime(targetName, amount);
