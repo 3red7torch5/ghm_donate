@@ -215,7 +215,7 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                 if (args.length >= 2) {
                     Player target = Bukkit.getPlayer(args[1]);
                     if (target == null) {
-                        sender.sendMessage(notificationPrefix + "§cPlayer not found!");
+                        sender.sendMessage(notificationPrefix + args[1] + "§c не в сети, взаимодействую офлайн");
                         return true;
                     }
 
@@ -224,24 +224,36 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                     try {
                         int amount = Integer.valueOf(args[2]);
                         if (action.equals("добавить") && args.length == 3) {
-                            addTime(targetName, amount);
-                            target.sendMessage(notificationPrefix + "§9Вам зачислено §6" + amount + " §aсекунд");
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "execute as "+targetName+" at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
+                            if (target == null){
+                                addTime(args[1],amount);
+                            } else {
+                                addTime(targetName, amount);
+                                target.sendMessage(notificationPrefix + "§9Вам зачислено §6" + amount + " §aсекунд");
+                                getServer().dispatchCommand(getServer().getConsoleSender(),
+                                        "execute as " + targetName + " at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
+                            }
                             updateScores();
                             return true;
                         } else if (action.equals("убавить") && args.length == 3) {
-                            removeTime(targetName, amount);
-                            target.sendMessage(notificationPrefix + "§9У вас забрано §6" + amount + " §aсекунд");
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "execute as "+targetName+" at @s run playsound hexcasting:abacus.shake master @s ~ ~ ~ 1 0.5 0");
+                            if (target == null) {
+                                removeTime(args[1],amount);
+                            } else {
+                                removeTime(targetName, amount);
+                                target.sendMessage(notificationPrefix + "§9У вас забрано §6" + amount + " §aсекунд");
+                                getServer().dispatchCommand(getServer().getConsoleSender(),
+                                        "execute as " + targetName + " at @s run playsound hexcasting:abacus.shake master @s ~ ~ ~ 1 0.5 0");
+                            }
                             updateScores();
                             return true;
                         } else if (action.equals("установить") && args.length == 3) {
-                            setTime(targetName, amount);
-                            target.sendMessage(notificationPrefix + "§9Ваше время теперь §6" + amount+ " §aсекунд");
-                            getServer().dispatchCommand(getServer().getConsoleSender(),
-                                    "execute as "+targetName+" at @s run playsound create:confirm master @s ~ ~ ~ 1 0.1 0");
+                            if (target == null){
+                                setTime(args[1],amount);
+                            } else {
+                                setTime(targetName, amount);
+                                target.sendMessage(notificationPrefix + "§9Ваше время теперь §6" + amount + " §aсекунд");
+                                getServer().dispatchCommand(getServer().getConsoleSender(),
+                                        "execute as " + targetName + " at @s run playsound create:confirm master @s ~ ~ ~ 1 0.1 0");
+                            }
                             updateScores();
                             return true;
                         } else if (action.equals("проверить") && args.length == 2) {
