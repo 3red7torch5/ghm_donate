@@ -36,7 +36,12 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
 
     @Override
     public void onEnable() {
-        getLogger().info("Enabled ghmods donation plugin");
+        getLogger().info("  ____ _   _ __  __           _     \n" +
+                "  / ___| | | |  \\/  | ___   __| |___ \n" +
+                " | |  _| |_| | |\\/| |/ _ \\ / _` / __|\n" +
+                " | |_| |  _  | |  | | (_) | (_| \\__ \\\n" +
+                "  \\____|_| |_|_|  |_|\\___/ \\__,_|___/\n" +
+                "                                     ");
         config.addDefault("notificationPrefix", "[Время] ");
         config.options().copyDefaults(true);
         this.saveDefaultConfig();
@@ -238,7 +243,7 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                 if (args.length >= 2) {
                     Player target = Bukkit.getPlayer(args[1]);
                     if (target == null) {
-                        sender.sendMessage(notificationPrefix + args[1] + "§c не в сети, взаимодействую офлайн");
+                        sender.sendMessage(notificationPrefix +"§c"+ args[1] + " не в сети, взаимодействую офлайн");
                         return true;
                     }
                     try {
