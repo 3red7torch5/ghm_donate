@@ -29,6 +29,8 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
     YamlConfiguration config = YamlConfiguration.loadConfiguration(configfile);
     File dbfile = new File(getDataFolder(),"time.yml");
     YamlConfiguration db = YamlConfiguration.loadConfiguration(dbfile);
+    File memoryfile = new File(getDataFolder(),"memory.yml");
+    YamlConfiguration mem = YamlConfiguration.loadConfiguration(memoryfile);
 
     private String notificationPrefix;
 
@@ -40,6 +42,7 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
         this.saveDefaultConfig();
         try {
             db.save(getDataFolder()+"/time.yml");
+            mem.save(getDataFolder()+"/memory.yml");
         } catch (Exception e) {
             getLogger().warning(e.getMessage());
         }
@@ -201,13 +204,33 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
             }
             
             if (sender.hasPermission("donation.admin")) {
-                if (action.equals("компенсация") && args.length == 2) {
-                    int amount = Integer.valueOf(args[1]);
+                if (action.equals("запомнить") && args.length == 1) {
+                    List<String> onlinePlayers = List.of();
                     for (Player p : getServer().getOnlinePlayers()) {
-                        addTime(p.getName(),amount);
-                        p.sendMessage(notificationPrefix + "§9Вам зачислено §6" + amount + " §aсекунд");
-                        getServer().dispatchCommand(getServer().getConsoleSender(),
-                                "execute as "+p.getName()+" at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
+                        onlinePlayers.add(p.getName());
+                    }
+                    try {
+                        mem.set("playerList",onlinePlayers);
+                        mem.save("memory.yml");
+                    } catch (Exception e) {
+                        getLogger().warning(e.getMessage());
+                    }
+                    return true;
+                }
+                if (action.equals("компенсация")) {
+                    if (args.length == 2) {
+                        int amount = Integer.valueOf(args[1]);
+                        for (Player p : getServer().getOnlinePlayers()) {
+                            addTime(p.getName(), amount);
+                            p.sendMessage(notificationPrefix + "§9Вам зачислена компенсация §6" + amount + " §aсекунд");
+                            getServer().dispatchCommand(getServer().getConsoleSender(),
+                                    "execute as " + p.getName() + " at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
+                        }
+                    } else if (args.length == 3 && args[-1].equals("вспомнить")) {
+                        int amount = Integer.valueOf(args[1]);
+                        for (String p : (List<String>) mem.get("playerList")) {
+                            addTime(p,amount);
+                        }
                     }
                     updateScores();
                     return true;
@@ -218,9 +241,7 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                         sender.sendMessage(notificationPrefix + args[1] + "§c не в сети, взаимодействую офлайн");
                         return true;
                     }
-
                     String targetName = target.getName();
-
                     try {
                         int amount = Integer.valueOf(args[2]);
                         if (action.equals("добавить") && args.length == 3) {
