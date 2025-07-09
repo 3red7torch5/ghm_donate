@@ -305,8 +305,9 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
             sender.sendMessage("§6/время добавить <ник> <количество> §f- Добавить время по нику");
             sender.sendMessage("§6/время убавить <ник> <количество> §f- Убавить время по нику");
             sender.sendMessage("§6/время компенсация <количество> §f- Добавить время всем на сервере");
+            sender.sendMessage("§6/время запомнить §f- Запоминает всех онлайн игроков");
+            sender.sendMessage("§6/время компенсация <количество> вспомнить §f- Добавить время всем из памяти");
             sender.sendMessage("§6/время залить §f- Залить всё время с баланса в бутылку в инвентаре");
-
         } else {
             sender.sendMessage("§cИспользование:");
             sender.sendMessage("§6/время §f- Проверить баланс");
@@ -335,6 +336,8 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     completions.add(player.getName());
                 }
+            } else if (args.length == 3 && args[1].equals("компенсация")) {
+                completions.add("вспомнить");
             }
         }
 
