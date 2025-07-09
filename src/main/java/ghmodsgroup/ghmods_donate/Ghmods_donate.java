@@ -210,6 +210,7 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                                 "execute as "+p.getName()+" at @s run playsound ars_nouveau:ea_finish master @s ~ ~ ~ 1 2 0");
                     }
                     updateScores();
+                    return true;
                 }
                 if (args.length >= 2) {
                     Player target = Bukkit.getPlayer(args[1]);
