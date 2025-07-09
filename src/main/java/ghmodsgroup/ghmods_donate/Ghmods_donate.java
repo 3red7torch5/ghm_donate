@@ -241,9 +241,12 @@ public final class Ghmods_donate extends JavaPlugin implements TabCompleter {
                         sender.sendMessage(notificationPrefix + args[1] + "§c не в сети, взаимодействую офлайн");
                         return true;
                     }
-                    String targetName = target.getName();
                     try {
                         int amount = Integer.valueOf(args[2]);
+                        String targetName = "Steve";
+                        if (target != null) {
+                            targetName = target.getName();
+                        }
                         if (action.equals("добавить") && args.length == 3) {
                             if (target == null){
                                 addTime(args[1],amount);
